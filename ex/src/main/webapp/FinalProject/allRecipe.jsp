@@ -97,6 +97,7 @@
     <p>제목: <%= recipe.getTitle() %></p>
     <p>내용: <%= recipe.getDescription() %></p>
     <h4>재료:</h4>
+    
     <ul>
     <% 
         for (IngredientBean ingredient : recipe.getIngredients()) { 
@@ -106,8 +107,13 @@
         } 
     %>
     </ul>
-<% 
+    
+<%  for(int i =0; i<150; i++) out.print("-");
+	
+
     } 
 %>
+<br>
+<a href="Main.jsp">메인</a>
 </body>
 </html>

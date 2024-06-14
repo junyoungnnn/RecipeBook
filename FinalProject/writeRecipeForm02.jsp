@@ -3,7 +3,14 @@
 <%@ page import="java.sql.PreparedStatement" %>
 <%@ page import="java.sql.ResultSet" %>
 <%@ page import="javax.servlet.http.HttpSession" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+
+<%@ page import="com.oreilly.servlet.multipart.DefaultFileRenamePolicy" %>
+<%@ page import="com.oreilly.servlet.MultipartRequest" %>
+<%@ page import="java.util.Enumeration" %>
+<%@ page import="java.io.File" %>
+<%@ page import="java.sql.*" %>
+
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%! 
     Connection conn = null;
     PreparedStatement pstmtRecipe = null;
@@ -13,16 +20,84 @@
     String url = "jdbc:oracle:thin:@localhost:1521:XE";
     String uid = "system";
     String pass = "manager";
-    String sqlRecipe = "INSERT INTO Recipes (RecipeID, UserID, FoodName, Title, Description) VALUES (recipe_seq.NEXTVAL, ?, ?, ?, ?)";
+    String sqlRecipe = "INSERT INTO Recipes (RecipeID, UserID, FoodName, Title, Description, image_path) VALUES (recipe_seq.NEXTVAL, ?, ?, ?, ?, ?)";
     String sqlIngredient = "SELECT IngredientID FROM Ingredients WHERE IngredientName = ?";
     String sqlInsertIngredient = "INSERT INTO Ingredients (IngredientID, IngredientName) VALUES (ingredient_seq.NEXTVAL, ?)";
     String sqlRecipeIngredient = "INSERT INTO RecipeIngredients (RecipeID, IngredientID, Quantity) VALUES (?, ?, ?)";
 %>
+<% 
+    String directory = application.getRealPath("/images");
+    int sizeLimit = 10*1024*1024; // 10MB 제한
+    
+    MultipartRequest multi = new MultipartRequest(
+        request,
+        directory,
+        sizeLimit,
+        "UTF-8",
+        new DefaultFileRenamePolicy()
+    );
+    
+    Enumeration enumeration = multi.getFileNames();
+    String fileName = null;
+    if (enumeration.hasMoreElements()) {
+        fileName = (String) enumeration.nextElement();
+    }
+    
+    String imagePath = null;
+    if (fileName != null) {
+        String uploadedFilePath = multi.getFilesystemName(fileName);
+        imagePath = "images/" + uploadedFilePath;
+    }
+
+    String foodName = multi.getParameter("foodName");
+    String title = multi.getParameter("title");
+    String description = multi.getParameter("description");
+    String[] ingredientNames = multi.getParameterValues("ingredientName");
+    String[] quantities = multi.getParameterValues("quantity");
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>레시피 저장</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        text-align: center;
+    }
+    .image-container {
+        width: 300px;
+        height: 300px;
+        margin: 20px auto;
+        overflow: hidden;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .image-container img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+    }
+    .button-container {
+        margin: 20px;
+    }
+    .button-container a {
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 10px;
+        color: white;
+        background-color: #0073e6;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+    .button-container a:hover {
+        background-color: #005bb5;
+    }
+</style>
 </head>
 <body>
 <%
@@ -34,12 +109,6 @@
     if (userID == null || userID.trim().isEmpty()) {
         out.println("<h3>사용자 ID를 찾을 수 없습니다. 다시 로그인해 주세요.</h3>");
     } else {
-        String foodName = request.getParameter("foodName");
-        String title = request.getParameter("title");
-        String description = request.getParameter("description");
-        String[] ingredientNames = request.getParameterValues("ingredientName");
-        String[] quantities = request.getParameterValues("quantity");
-
         int recipeID = 0;
 
         try {
@@ -55,6 +124,7 @@
             pstmtRecipe.setString(2, foodName);
             pstmtRecipe.setString(3, title);
             pstmtRecipe.setString(4, description);
+            pstmtRecipe.setString(5, imagePath);
             pstmtRecipe.executeUpdate();
 
             // 생성된 레시피 ID 가져오기
@@ -94,6 +164,13 @@
             }
 
             out.println("<h3>레시피가 성공적으로 저장되었습니다!</h3>");
+            if (imagePath != null) {
+%>
+                <div class="image-container">
+                    <img src="<%= request.getContextPath() + "/" + imagePath %>" alt="업로드된 이미지">
+                </div>
+<%
+            }
         } catch (Exception e) {
             e.printStackTrace();
             out.println("<h3>레시피 저장 중 오류가 발생했습니다.</h3>");
@@ -111,6 +188,9 @@
         }
     }
 %>
-<a href="allRecipe.jsp">레시피 모두 보기</a>
+<div class="button-container">
+    <a href="search.jsp">레시피 모두 보기</a>
+    <a href="Main.jsp">홈으로 돌아가기</a>
+</div>
 </body>
 </html>

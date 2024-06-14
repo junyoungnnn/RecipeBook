@@ -7,14 +7,12 @@
     <title>로그인</title>
     <style>
         body {
-          /*글꼴변경*/
             font-family: 'Segoe UI', Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
-          /*배경색추가*/
             background-color: #f4f4f9;
         }
         .login-container {
@@ -28,7 +26,6 @@
         .login-container h2 {
             margin: 0 0 30px 0;
             text-align: center;
-            /*추가*/
             color: #333;
             font-size: 24px;
         }
@@ -39,10 +36,10 @@
             margin-bottom: 10px;
             border: 2px solid #ddd;
             border-radius: 3px;
-            /* 추가 */
-            box-sizing: border-box; 
+            box-sizing: border-box;
         }
-        .login-container input[type="submit"] {
+        .login-container input[type="submit"],
+        .login-container button {
             width: 100%;
             padding: 12px;
             background-color: #0073e6;
@@ -50,14 +47,13 @@
             border: none;
             border-radius: 3px;
             cursor: pointer;
-            /*추가*/
-            transition: background-color 0.3s; 
+            transition: background-color 0.3s;
+            margin-top: 10px; /* 버튼 간의 간격 추가 */
         }
-         /* 마우스올렸을떄 색상 변경 */
-        .login-container input[type="submit"]:hover {
-            background-color: #003d80; 
+        .login-container input[type="submit"]:hover,
+        .login-container button:hover {
+            background-color: #003d80;
         }
-        /*오류메시지 배경색, 패딩 추가*/
         .error-message {
             color: #d8000c;
             background-color: #ffbaba;
@@ -67,6 +63,11 @@
             margin-bottom: 10px;
         }
     </style>
+    <script>
+        function redirectToMain() {
+            window.location.href = 'Main.jsp';
+        }
+    </script>
 </head>
 <body>
 
@@ -80,6 +81,7 @@
         <input type="password" name="password" placeholder="비밀번호" required>
         <input type="submit" value="로그인">
     </form>
+    <button type="button" onclick="redirectToMain()">Home</button>
 </div>
 
 </body>

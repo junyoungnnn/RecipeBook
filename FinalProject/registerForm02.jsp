@@ -20,6 +20,49 @@
 <head>
 <meta charset="UTF-8">
 <title>회원가입 처리</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f0f0f0;
+        text-align: center;
+    }
+    h3 {
+        color: #0073e6;
+    }
+    h2 {
+        margin-top: 20px;
+        color: #333;
+    }
+    table {
+        width: 50%;
+        margin: 20px auto;
+        border-collapse: collapse;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    td {
+        padding: 10px;
+        border: 1px solid #ccc;
+    }
+    .button-container {
+        margin: 20px;
+    }
+    .button-container a {
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 10px;
+        color: white;
+        background-color: #0073e6;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+    .button-container a:hover {
+        background-color: #005bb5;
+    }
+</style>
 </head>
 <body>
 <%
@@ -90,7 +133,8 @@
     <td><jsp:getProperty name="member" property="createAt" /></td>
 </tr>
 </table>
-<a href="registerForm01.jsp">다시 시도하기</a>
-<a href="allMembers.jsp">회원 목록 보기</a>
+<div class="button-container">
+    <a href="Main.jsp">홈으로 돌아가기</a>
+</div>
 </body>
 </html>

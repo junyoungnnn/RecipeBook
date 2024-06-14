@@ -11,6 +11,7 @@ public class RecipeBean implements Serializable {
     private String foodName;
     private String title;
     private String description;
+    private String image_path;
     private List<IngredientBean> ingredients;
 
     // Getters and setters
@@ -53,6 +54,7 @@ public class RecipeBean implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
+    
 
     public List<IngredientBean> getIngredients() {
         return ingredients;
@@ -61,4 +63,12 @@ public class RecipeBean implements Serializable {
     public void setIngredients(List<IngredientBean> ingredients) {
         this.ingredients = ingredients;
     }
+
+	public String getImage_path() {
+		return image_path;
+	}
+
+	public void setImage_path(String image_path) {
+		this.image_path = image_path;
+	}
 }

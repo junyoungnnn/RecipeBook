@@ -16,13 +16,26 @@
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+        }
+        .menu {
+            display: flex;
+            justify-content: space-between;
+            background-color: #f8f8f8;
+            padding: 10px 20px;
+            border-bottom: 2px solid #0073e6;
+        }
+        .menu a {
+            text-decoration: none;
+            color: #333;
+            margin: 0 10px;
         }
         .recipe-detail {
             max-width: 600px;
-            margin: 0 auto;
+            margin: 20px auto;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative; /* to position the button within the container */
         }
         .recipe-detail img {
             max-width: 100%;
@@ -33,9 +46,53 @@
             font-weight: bold;
             margin-top: 10px;
         }
+        .back-button {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background-color: #0073e6;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+        .back-button:hover {
+            background-color: #005bb5;
+        }
     </style>
 </head>
 <body>
+<div class="menu">
+    <div>
+        <a href="Main.jsp">홈</a>
+        <a href="search.jsp">레시피 찾기</a>
+        <% 
+        String username = (String) session.getAttribute("username");
+        String userID = (String) session.getAttribute("sessionUserId");
+        if(username != null) { %>
+        <a href="writeRecipeForm01.jsp">글 쓰기</a>
+        <% 
+        }
+        %>
+    </div>
+    <div>
+    <%    	
+    	if(username != null){
+    		out.println(username + "님 환영합니다");
+    	%>
+    	<a href="myRecipes.jsp">내 레시피</a>
+    	<a href="logout.jsp">로그아웃</a>
+    	<%	
+    	}
+    	else{
+    %>
+        <a href="login.jsp">로그인</a>
+        <a href="registerForm01.jsp">회원가입</a>
+        <%}
+    	%>
+    </div>
+</div>
 
 <%
     String recipeID = request.getParameter("recipeID");
@@ -58,7 +115,7 @@
             conn = DriverManager.getConnection(url, uid, pass);
 
             // (3 단계) 레시피 상세 정보를 가져오는 SQL 쿼리 작성
-            String sql = "SELECT r.UserID, r.RecipeID, r.FoodName, r.Title, r.Description, i.IngredientName, ri.Quantity " +
+            String sql = "SELECT r.UserID, r.RecipeID, r.FoodName, r.Title, r.Description, r.Image_path, i.IngredientName, ri.Quantity " +
                          "FROM Recipes r " +
                          "JOIN RecipeIngredients ri ON r.RecipeID = ri.RecipeID " +
                          "JOIN Ingredients i ON ri.IngredientID = i.IngredientID " +
@@ -79,6 +136,7 @@
                     recipe.setFoodName(rs.getString("FoodName"));
                     recipe.setTitle(rs.getString("Title"));
                     recipe.setDescription(rs.getString("Description"));
+                    recipe.setImage_path(rs.getString("Image_path"));
                 }
                 IngredientBean ingredient = new IngredientBean();
                 ingredient.setIngredientName(rs.getString("IngredientName"));
@@ -107,11 +165,10 @@
         if (recipe != null) {
 %>
             <div class="recipe-detail">
-                <img src="images/default-recipe-image.png" alt="레시피 이미지">
                 <div class="recipe-title"><%= recipe.getTitle() %></div>
                 <p>작성자ID: <%= recipe.getUserID() %></p>
                 <p>음식 이름: <%= recipe.getFoodName() %></p>
-                <p>내용: <%= recipe.getDescription() %></p>
+                <img src="<%= request.getContextPath() + "/" + recipe.getImage_path() %>" alt="업로드된 이미지">
                 <h4>재료:</h4>
                 <ul>
                 <%
@@ -122,6 +179,8 @@
                     }
                 %>
                 </ul>
+                <p>내용: <%= recipe.getDescription() %></p>
+                <a href="javascript:history.back()" class="back-button">목록</a>
             </div>
 <%
         } else {

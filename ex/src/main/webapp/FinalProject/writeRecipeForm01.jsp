@@ -31,7 +31,7 @@
             padding: 10px;
             border-bottom: 1px solid #ddd;
         }
-        input[type="text"], textarea {
+        input[type="text"], textarea, input[type="file"] {
             width: 100%;
             padding: 10px;
             margin: 5px 0;
@@ -42,7 +42,7 @@
         textarea {
             resize: vertical;
         }
-        input[type="submit"], input[type="reset"] {
+        input[type="submit"], button[type="button"], button[type="button"] {
             background-color: #0073e6;
             color: white;
             padding: 10px 20px;
@@ -51,8 +51,15 @@
             cursor: pointer;
             margin-right: 10px;
         }
-        input[type="submit"]:hover, input[type="reset"]:hover {
+        input[type="submit"]:hover, button[type="button"]:hover, button[type="button"]:hover {
             background-color: #005bb5;
+        }
+        .add-button {
+            text-align: right;
+            margin: 10px 0;
+        }
+        .hidden {
+            display: none;
         }
     </style>
     <script>
@@ -67,35 +74,63 @@
             }
             return true;
         }
+
+        function goToMain() {
+            window.location.href = 'Main.jsp';
+        }
+
+        let ingredientCount = 1;
+
+        function addIngredient() {
+            if (ingredientCount < 10) {
+                ingredientCount++;
+                const table = document.getElementById("ingredientTable");
+                const row = table.insertRow(-1);
+                const cell1 = row.insertCell(0);
+                const cell2 = row.insertCell(1);
+                const cell3 = row.insertCell(2);
+                const cell4 = row.insertCell(3);
+
+                cell1.innerHTML = `재료 ${ingredientCount}`;
+                cell2.innerHTML = `<input type="text" name="ingredientName">`;
+                cell3.innerHTML = `양 ${ingredientCount}`;
+                cell4.innerHTML = `<input type="text" name="quantity">`;
+
+                if (ingredientCount === 10) {
+                    document.getElementById("addButton").classList.add("hidden");
+                }
+            }
+        }
     </script>
 </head>
 <body>
     <div class="container">
         <h2>레시피 쓰기</h2>
-        <form method="post" action="writeRecipeForm02.jsp" onsubmit="return validateForm()">
-            <table>
+        <form method="post" action="writeRecipeForm02.jsp" onsubmit="return validateForm()" enctype="multipart/form-data">
+            <table id="ingredientTable">
+                <tr>
+                    <td>음식 이미지</td>
+                    <td colspan="3"><input type="file" name="file"></td>
+                </tr>
                 <tr>
                     <td>음식 이름</td>
-                    <td><input type="text" name="foodName" required></td>
+                    <td colspan="3"><input type="text" name="foodName" required></td>
                 </tr>
                 <tr>
                     <td>제목</td>
-                    <td><input type="text" name="title" required></td>
+                    <td colspan="3"><input type="text" name="title" required></td>
                 </tr>
                 <tr>
-                    <td>재료 1</td>
+                    <td>재료</td>
                     <td><input type="text" name="ingredientName" required></td>
-                    <td>양 1</td>
+                    <td>양</td>
                     <td><input type="text" name="quantity" required></td>
                 </tr>
-                <% for (int i = 2; i <= 10; i++) { %>
-                <tr>
-                    <td>재료 <%= i %></td>
-                    <td><input type="text" name="ingredientName"></td>
-                    <td>양 <%= i %></td>
-                    <td><input type="text" name="quantity"></td>
-                </tr>
-                <% } %>
+            </table>
+            <div class="add-button">
+                <button type="button" id="addButton" onclick="addIngredient()">+</button>
+            </div>
+            <table>
                 <tr>
                     <td>내용</td>
                     <td colspan="3"><textarea name="description" rows="10" required></textarea></td>
@@ -103,7 +138,7 @@
                 <tr>
                     <td colspan="4" style="text-align: center;">
                         <input type="submit" value="전송">
-                        <input type="reset" value="취소">
+                        <button type="button" onclick="goToMain()">취소</button>
                     </td>
                 </tr>
             </table>

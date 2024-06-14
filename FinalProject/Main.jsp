@@ -1,13 +1,11 @@
-<%@ page import="java.sql.Connection" %>
-<%@ page import="java.sql.DriverManager" %>
-<%@ page import="java.sql.PreparedStatement" %>
-<%@ page import="java.sql.ResultSet" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import="java.sql.*" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>내가 작성한 레시피</title>
+    <title>레시피 북 메인 화면</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -38,6 +36,11 @@
             margin-bottom: 20px;
             padding: 10px;
             text-align: center;
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+        .recipe:hover {
+            transform: scale(1.05);
         }
         .recipe img {
             max-width: 100%;
@@ -49,6 +52,11 @@
             font-weight: bold;
         }
     </style>
+    <script>
+        function redirectToRecipe(recipeID) {
+            window.location.href = 'recipeDetails.jsp?recipeID=' + recipeID;
+        }
+    </script>
 </head>
 <body>
 
@@ -56,77 +64,81 @@
     <div>
         <a href="Main.jsp">홈</a>
         <a href="search.jsp">레시피 찾기</a>
-        <a href="writeRecipeForm01.jsp">글 쓰기</a>
+        <% 
+        String username = (String)session.getAttribute("username"); 
+        if(username != null) { %>
+            <a href="writeRecipeForm01.jsp">글 쓰기</a>
+        <% 
+        }
+        %>
     </div>
     <div>
-    <%
-        String username = (String) session.getAttribute("username");
-        String userID = (String) session.getAttribute("sessionUserId");
-        
-        if (username != null) {
+    <%        
+        if(username != null){
             out.println(username + "님 환영합니다");
-    %>
+        %>
+        <a href="myRecipes.jsp">내 레시피</a>
         <a href="logout.jsp">로그아웃</a>
-    <%
-        } else {
+        <%    
+        }
+        else{
     %>
         <a href="login.jsp">로그인</a>
         <a href="registerForm01.jsp">회원가입</a>
-    <% 
-        } 
-    %>
+        <%}
+        %>
+        
     </div>
 </div>
 
 <div class="content">
-<%
-    if (userID != null) {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
+    <%
+        // DB 연결 정보
+        String driver = "oracle.jdbc.driver.OracleDriver";
         String url = "jdbc:oracle:thin:@localhost:1521:XE";
         String uid = "system";
         String pass = "manager";
 
-        try {
-            // (1 단계) JDBC 드라이버 로드
-            Class.forName("oracle.jdbc.driver.OracleDriver");
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
 
-            // (2 단계) 데이터베이스 연결 객체 생성
+        try {
+            // JDBC 드라이버 로드
+            Class.forName(driver);
+
+            // DB 연결
             conn = DriverManager.getConnection(url, uid, pass);
 
-            // (3 단계) PreparedStatement 객체 생성 및 값 설정
-            String sql = "SELECT * FROM Recipes WHERE UserID = ?";
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, userID);
+            // 쿼리 작성
+            String sql = "SELECT RecipeID, FoodName, Title, image_path " +
+                         "FROM (SELECT RecipeID, FoodName, Title, image_path " +
+                               "FROM Recipes " +
+                               "ORDER BY RecipeID DESC) " +
+                         "WHERE ROWNUM <= 3";
 
-            // (4 단계) SQL 문을 실행하여 결과 처리
+            // 쿼리 실행
+            pstmt = conn.prepareStatement(sql);
             rs = pstmt.executeQuery();
 
+            // 결과 출력
             while (rs.next()) {
-                String recipeID = rs.getString("RecipeID");
+                int recipeID = rs.getInt("RecipeID");
                 String foodName = rs.getString("FoodName");
                 String title = rs.getString("Title");
-                String description = rs.getString("Description");
-%>
-                <div class="recipe">
-                    <img src="images/default-recipe-image.png" alt="레시피 이미지">
+                String imagePath = rs.getString("image_path");
+
+                // 레시피 출력
+    %>
+                <div class="recipe" onclick="redirectToRecipe(<%= recipeID %>)">
+                    <img src="<%= request.getContextPath() + "/" + imagePath %>" alt="업로드된 이미지">
                     <div class="recipe-title"><%= title %></div>
-                    <p><%= description %></p>
-                    <p>음식 이름: <%= foodName %></p>
-                    <a href="recipeDetails.jsp?recipeID=<%= recipeID %>">자세히 보기</a>
-                    <form method="post" action="deleteRecipe.jsp" onsubmit="return confirm('정말 삭제하시겠습니까?');">
-                        <input type="hidden" name="recipeID" value="<%= recipeID %>">
-                        <button type="submit">삭제</button>
-                    </form>
                 </div>
-<%
+    <%
             }
         } catch (Exception e) {
             e.printStackTrace();
-            out.println("<h3>레시피를 가져오는 중 오류가 발생했습니다.</h3>");
         } finally {
-            // (5 단계) 사용한 리소스 해제
             try {
                 if (rs != null) rs.close();
                 if (pstmt != null) pstmt.close();
@@ -135,10 +147,7 @@
                 e.printStackTrace();
             }
         }
-    } else {
-        out.println("<h3>로그인 후에 이용해 주세요.</h3>");
-    }
-%>
+    %>
 </div>
 
 </body>

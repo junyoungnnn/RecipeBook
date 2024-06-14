@@ -39,7 +39,7 @@
             border-radius: 4px;
             box-sizing: border-box;
         }
-        input[type="submit"], input[type="reset"] {
+        input[type="submit"], button {
             background-color: #0073e6;
             color: white;
             padding: 10px 20px;
@@ -48,10 +48,15 @@
             cursor: pointer;
             margin-right: 10px;
         }
-        input[type="submit"]:hover, input[type="reset"]:hover {
+        input[type="submit"]:hover, button:hover {
             background-color: #005bb5;
         }
     </style>
+    <script>
+        function redirectToMain() {
+            window.location.href = 'Main.jsp';
+        }
+    </script>
 </head>
 <body>
     <div class="container">
@@ -77,7 +82,7 @@
                 <tr>
                     <td colspan="2" style="text-align: center;">
                         <input type="submit" value="회원가입">
-                        <input type="reset" value="취소">
+                        <button type="button" onclick="redirectToMain()">취소</button>
                     </td>
                 </tr>
             </table>

@@ -52,36 +52,73 @@
             cursor: pointer;
         }
         .results {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
             margin: 20px;
         }
         .results .recipe {
+            width: 45%;
+            margin-bottom: 20px;
             padding: 10px;
-            border-bottom: 1px solid #ddd;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        .results .recipe:hover {
+            transform: scale(1.05);
+        }
+        .recipe .image-container {
+            width: 100%;
+            height: 400px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .recipe img {
+            width: 100%;
+            height: auto;
+            object-fit: cover; /* 이미지가 컨테이너를 채우도록 설정 */
         }
     </style>
+    <script>
+        function navigateToDetail(recipeID) {
+            window.location.href = 'recipeDetails.jsp?recipeID=' + recipeID;
+        }
+    </script>
 </head>
 <body>
 
 <div class="menu">
     <div>
+        <a href="Main.jsp">홈</a>
         <a href="search.jsp">레시피 찾기</a>
-        <% if (username != null) { %>
+        <% 
+        if(username != null) { %>
             <a href="writeRecipeForm01.jsp">글 쓰기</a>
-        <% } %>
+        <% 
+        }
+        %>
     </div>
     <div>
-        <%
+    <%     
         if(username != null){
             out.println(username + "님 환영합니다");
         %>
+        <a href="myRecipes.jsp">내 레시피</a>
         <a href="logout.jsp">로그아웃</a>
-        <%
-        }
-        else{
+        <% 
+        } else {
         %>
-        <a href="login.jsp">로그인</a>
-        <a href="signup.jsp">회원가입</a>
-        <% } %>
+            <a href="login.jsp">로그인</a>
+            <a href="registerForm01.jsp">회원가입</a>
+        <% 
+        }
+        %>
     </div>
 </div>
 
@@ -122,9 +159,13 @@
             String recipeID = resultSet.getString("RECIPEID");
             String foodName = resultSet.getString("FOODNAME");
             String title = resultSet.getString("TITLE");
+            String imagePath = resultSet.getString("image_path");
 %>
-            <div class="recipe">
-                <h3><a href="recipeDetails.jsp?recipeID=<%= recipeID %>"><%= foodName %></a></h3>
+            <div class="recipe" onclick="navigateToDetail('<%= recipeID %>')">
+                <h3><%= foodName %></h3>
+                <div class="image-container">
+                    <img src="<%= request.getContextPath() + "/" + imagePath %>" alt="업로드된 이미지">
+                </div>
                 <p><%= title %></p>
             </div>
 <%
