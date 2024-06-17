@@ -161,35 +161,47 @@
         }
 %>
 
+
 <%
-        if (recipe != null) {
+if (recipe != null) {
 %>
-            <div class="recipe-detail">
-                <div class="recipe-title"><%= recipe.getTitle() %></div>
-                <p>작성자ID: <%= recipe.getUserID() %></p>
-                <p>음식 이름: <%= recipe.getFoodName() %></p>
-                <img src="<%= request.getContextPath() + "/" + recipe.getImage_path() %>" alt="업로드된 이미지">
-                <h4>재료:</h4>
-                <ul>
-                <%
-                    for (IngredientBean ingredient : recipe.getIngredients()) {
-                %>
-                    <li><%= ingredient.getIngredientName() %> - <%= ingredient.getQuantity() %></li>
-                <%
-                    }
-                %>
-                </ul>
-                <p>내용: <%= recipe.getDescription() %></p>
-                <a href="javascript:history.back()" class="back-button">목록</a>
-            </div>
+    <div class="recipe-detail">
+        <div class="recipe-title"><%= recipe.getTitle() %></div>
+        <p>작성자ID: <%= recipe.getUserID() %></p>
+        <p>음식 이름: <%= recipe.getFoodName() %></p>
+        <img src="<%= request.getContextPath() + "/" + recipe.getImage_path() %>" alt="업로드된 이미지">
+        <h4>재료:</h4>
+        <ul>
+        <%
+            for (IngredientBean ingredient : recipe.getIngredients()) {
+        %>
+            <p><li><%= ingredient.getIngredientName() %> - <%= ingredient.getQuantity() %></li> 
+            <%= ingredient.getIngredientName() %> 구매하기</a>
+            <a href="https://www.coupang.com/np/search?component=&q=<%= ingredient.getIngredientName() %>&channel=user">쿠팡</a>
+    		<a href="https://search.shopping.naver.com/search/all?query=<%=ingredient.getIngredientName() %>">네이버</a>
+    		</p>
+            
+        <%
+            }
+        %>
+        
+        </ul>
+        
+        
+        <p><h4>내용: <br></h4><%= recipe.getDescription().replaceAll("\\n", "<br>") %></p>
+        <a href="javascript:history.back()" class="back-button">목록</a>
+    </div>
 <%
-        } else {
-            out.println("<h3>레시피를 찾을 수 없습니다.</h3>");
-        }
-    } else {
-        out.println("<h3>잘못된 접근입니다.</h3>");
-    }
+} else {
+    out.println("<h3>레시피를 찾을 수 없습니다.</h3>");
+} 
+} else {
+    out.println("<h3>잘못된 접근입니다.</h3>");
+}
 %>
+
+
+
 
 </body>
 </html>

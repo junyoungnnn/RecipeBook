@@ -51,6 +51,23 @@
             font-size: 16px;
             font-weight: bold;
         }
+        .latest-recipes-title {
+    display: block;
+    width: fit-content; /* 요소의 너비를 내용에 맞게 설정 */
+    margin: 0 auto; /* 가운데 정렬을 위한 margin 설정 */
+    padding: 8px 12px; /* 위아래 8px, 좌우 12px 여백 */
+    font-size: 24px;
+    font-weight: bold;
+    color: #0073e6;
+    background-color: #f0f0f0; /* 배경색 */
+    border: 2px solid #0073e6; /* 테두리 */
+    border-radius: 8px; /* 모서리 둥글기 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 약간의 그림자 효과 */
+}
+
+
+
+
     </style>
     <script>
         function redirectToRecipe(recipeID) {
@@ -90,6 +107,10 @@
         
     </div>
 </div>
+
+<br>
+<div class="latest-recipes-title">최신 레시피</div>
+    
 
 <div class="content">
     <%
