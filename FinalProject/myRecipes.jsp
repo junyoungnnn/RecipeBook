@@ -17,14 +17,18 @@
         .menu {
             display: flex;
             justify-content: space-between;
-            background-color: #f8f8f8;
+            background-color: #333;
             padding: 10px 20px;
             border-bottom: 2px solid #0073e6;
         }
         .menu a {
             text-decoration: none;
-            color: #333;
+            color: white;
             margin: 0 10px;
+            font-size: 16px;
+        }
+        .menu a:hover {
+            color: #0073e6;
         }
         .content {
             padding: 20px;
@@ -104,7 +108,7 @@
     <div>
     <%        
         if(username != null){
-            out.println(username + "님 환영합니다");
+        	 out.println("<span style='color: white;'>" + username + "님 환영합니다</span>");
         %>
         <a href="myRecipes.jsp">내 레시피</a>
         <a href="logout.jsp">로그아웃</a>

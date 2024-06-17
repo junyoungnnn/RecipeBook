@@ -17,34 +17,61 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+            background-color: #f4f4f9;
         }
         .menu {
             display: flex;
             justify-content: space-between;
-            background-color: #f8f8f8;
+            background-color: #333;
             padding: 10px 20px;
             border-bottom: 2px solid #0073e6;
         }
         .menu a {
             text-decoration: none;
-            color: #333;
+            color: white;
             margin: 0 10px;
+            font-size: 16px;
+        }
+        .menu a:hover {
+            color: #0073e6;
         }
         .recipe-detail {
-            max-width: 600px;
-            margin: 20px auto;
+            max-width: 700px;
+            margin: 40px auto;
             padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            position: relative; /* to position the button within the container */
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            background-color: #fff;
+            border-radius: 10px;
+            position: relative;
         }
         .recipe-detail img {
             max-width: 100%;
             height: auto;
+            border-radius: 10px;
         }
         .recipe-title {
-            font-size: 24px;
+            font-size: 28px;
             font-weight: bold;
             margin-top: 10px;
+            color: #333;
+        }
+        .ingredient-links {
+            margin-top: 5px;
+        }
+        .ingredient-links a {
+            display: inline-block;
+            margin: 5px 5px 5px 0;
+            padding: 10px 15px;
+            background-color: #0073e6;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s, transform 0.3s;
+            font-size: 14px;
+        }
+        .ingredient-links a:hover {
+            background-color: #005bb5;
+            transform: scale(1.05);
         }
         .back-button {
             position: absolute;
@@ -56,9 +83,11 @@
             text-decoration: none;
             border-radius: 5px;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s, transform 0.3s;
         }
         .back-button:hover {
             background-color: #005bb5;
+            transform: scale(1.05);
         }
     </style>
 </head>
@@ -175,20 +204,20 @@ if (recipe != null) {
         <%
             for (IngredientBean ingredient : recipe.getIngredients()) {
         %>
-            <p><li><%= ingredient.getIngredientName() %> - <%= ingredient.getQuantity() %></li> 
-            <%= ingredient.getIngredientName() %> 구매하기</a>
-            <a href="https://www.coupang.com/np/search?component=&q=<%= ingredient.getIngredientName() %>&channel=user">쿠팡</a>
-    		<a href="https://search.shopping.naver.com/search/all?query=<%=ingredient.getIngredientName() %>">네이버</a>
-    		</p>
-            
+            <li>
+                <p><%= ingredient.getIngredientName() %> - <%= ingredient.getQuantity() %></p>
+                <div class="ingredient-links">
+                    <a href="https://www.coupang.com/np/search?component=&q=<%= ingredient.getIngredientName() %>&channel=user">쿠팡에서 구매하기</a>
+                    <a href="https://search.shopping.naver.com/search/all?query=<%= ingredient.getIngredientName() %>">네이버에서 구매하기</a>
+                </div>
+            </li>
         <%
             }
         %>
-        
         </ul>
         
-        
-        <p><h4>내용: <br></h4><%= recipe.getDescription().replaceAll("\\n", "<br>") %></p>
+        <h4>내용:</h4>
+        <p><%= recipe.getDescription().replaceAll("\\n", "<br>") %></p>
         <a href="javascript:history.back()" class="back-button">목록</a>
     </div>
 <%
@@ -199,9 +228,5 @@ if (recipe != null) {
     out.println("<h3>잘못된 접근입니다.</h3>");
 }
 %>
-
-
-
-
 </body>
 </html>
