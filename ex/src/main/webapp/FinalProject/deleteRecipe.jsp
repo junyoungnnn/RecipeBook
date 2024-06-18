@@ -20,7 +20,6 @@
         Connection conn = null;
         PreparedStatement pstmtRecipe = null;
         PreparedStatement pstmtRecipeIngredient = null;
-        PreparedStatement pstmtIngredient = null;
         String url = "jdbc:oracle:thin:@localhost:1521:XE";
         String uid = "system";
         String pass = "manager";
@@ -39,21 +38,21 @@
             String sqlDeleteRecipeIngredients = "DELETE FROM RecipeIngredients WHERE RecipeID = ?";
             pstmtRecipeIngredient = conn.prepareStatement(sqlDeleteRecipeIngredients);
             pstmtRecipeIngredient.setString(1, recipeID);
-            pstmtRecipeIngredient.executeUpdate();
+            int rowsAffectedRecipeIngredients = pstmtRecipeIngredient.executeUpdate();
 
             // (5 단계) Recipes 테이블에서 해당 레시피 삭제
             String sqlDeleteRecipe = "DELETE FROM Recipes WHERE RecipeID = ? AND UserID = ?";
             pstmtRecipe = conn.prepareStatement(sqlDeleteRecipe);
             pstmtRecipe.setString(1, recipeID);
             pstmtRecipe.setString(2, userID);
-            int rowsAffected = pstmtRecipe.executeUpdate();
+            int rowsAffectedRecipe = pstmtRecipe.executeUpdate();
 
-            if (rowsAffected > 0) {
+            if (rowsAffectedRecipe > 0) {
                 // (6 단계) 트랜잭션 커밋
                 conn.commit();
                 out.println("<h3>레시피가 성공적으로 삭제되었습니다.</h3>");
             } else {
-                out.println("<h3>레시피 삭제에 실패했습니다.</h3>");
+                out.println("<h3>레시피 삭제에 실패했습니다. 삭제할 레시피가 없거나, 권한이 없습니다.</h3>");
             }
         } catch (Exception e) {
             // (7 단계) 오류 발생 시 트랜잭션 롤백
@@ -65,7 +64,7 @@
                 }
             }
             e.printStackTrace();
-            out.println("<h3>레시피 삭제 중 오류가 발생했습니다.</h3>");
+            out.println("<h3>레시피 삭제 중 오류가 발생했습니다: " + e.getMessage() + "</h3>");
         } finally {
             // (8 단계) 사용한 리소스 해제
             try {
@@ -78,6 +77,9 @@
         }
     }
 %>
-<a href="myRecipes.jsp">내 레시피 목록으로 돌아가기</a>
+<%
+		response.sendRedirect("myRecipes.jsp");
+%>
+
 </body>
 </html>

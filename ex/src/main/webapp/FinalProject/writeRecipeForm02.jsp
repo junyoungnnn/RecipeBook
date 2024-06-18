@@ -11,6 +11,9 @@
 <%@ page import="java.sql.*" %>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+		request.setCharacterEncoding("UTF-8");
+%>
 <%! 
     Connection conn = null;
     PreparedStatement pstmtRecipe = null;
@@ -101,7 +104,6 @@
 </head>
 <body>
 <%
-    request.setCharacterEncoding("UTF-8");
 
     // 세션에서 userid 가져오기
     String userID = (String) session.getAttribute("sessionUserId");

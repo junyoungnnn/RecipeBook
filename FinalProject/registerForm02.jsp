@@ -5,6 +5,9 @@
 <%@ page import="java.sql.Timestamp" %>
 <%@ page import="com.javalec.ex.PasswordUtil.PasswordUtil" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%
+		request.setCharacterEncoding("UTF-8");
+%>
 <%! 
     Connection conn = null;
     PreparedStatement pstmt = null;
@@ -66,7 +69,6 @@
 </head>
 <body>
 <%
-    request.setCharacterEncoding("UTF-8");
 
     // 자바빈즈 객체에 폼 데이터 설정
     member.setCreateAt(new Timestamp(System.currentTimeMillis()));

@@ -3,6 +3,8 @@
 <%@ page import="javax.servlet.http.*, javax.servlet.*" %>
 <%@ page import="com.javalec.ex.PasswordUtil.PasswordUtil" %>
 <%
+		request.setCharacterEncoding("UTF-8");
+
     String userid = request.getParameter("userid");
     String password = request.getParameter("password");
     boolean isValidUser = false;

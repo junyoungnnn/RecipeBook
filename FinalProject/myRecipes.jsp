@@ -36,9 +36,9 @@
             flex-wrap: wrap;
         }
         .recipe {
-            width: 45%; /* 한 행에 두 개의 레시피를 보여주기 위해 width를 45%로 설정 */
+            width: 45%;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin: 10px; /* 마진을 설정하여 간격을 조정 */
+            margin: 10px;
             padding: 10px;
             text-align: center;
             transition: transform 0.2s;
@@ -58,7 +58,7 @@
         .recipe img {
             width: 100%;
             height: auto;
-            object-fit: cover; /* 이미지가 컨테이너를 채우도록 설정 */
+            object-fit: cover;
         }
         .recipe-title {
             margin-top: 10px;
@@ -66,22 +66,22 @@
             font-weight: bold;
         }
         .delete-button {
-            background-color: #ff4d4d; /* 빨간색 배경 */
-            color: white; /* 흰색 글자 */
+            background-color: #ff4d4d;
+            color: white;
             border: none;
             padding: 10px 20px;
             font-size: 14px;
             cursor: pointer;
             transition: background-color 0.3s, transform 0.3s;
             margin-top: 10px;
-            border-radius: 5px; /* 둥근 모서리 */
+            border-radius: 5px;
         }
         .delete-button:hover {
-            background-color: #ff1a1a; /* 더 진한 빨간색 배경 */
+            background-color: #ff1a1a;
             transform: scale(1.1);
         }
         .delete-button:active {
-            background-color: #e60000; /* 눌렸을 때 진한 빨간색 배경 */
+            background-color: #e60000;
         }
     </style>
     <script>
@@ -108,7 +108,7 @@
     <div>
     <%        
         if(username != null){
-        	 out.println("<span style='color: white;'>" + username + "님 환영합니다</span>");
+            out.println("<span style='color: white;'>" + username + "님 환영합니다</span>");
         %>
         <a href="myRecipes.jsp">내 레시피</a>
         <a href="logout.jsp">로그아웃</a>
@@ -163,7 +163,7 @@
                     <div class="recipe-title"><%= title %></div>
                     <p><%= description %></p>
                     <p>음식 이름: <%= foodName %></p>
-                    <form method="post" action="deleteRecipe.jsp" onsubmit="return confirm('정말 삭제하시겠습니까?');">
+                    <form method="post" action="deleteRecipe.jsp" onsubmit="return confirm('정말 삭제하시겠습니까?');" onclick="event.stopPropagation();">
                         <input type="hidden" name="recipeID" value="<%= recipeID %>">
                         <button type="submit" class="delete-button">삭제</button>
                     </form>

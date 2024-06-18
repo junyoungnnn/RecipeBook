@@ -61,7 +61,7 @@
 <body>
     <div class="container">
         <h2>회원가입</h2>
-        <form method="post" action="registerForm02.jsp">
+        <form method="post" action="registerForm02.jsp" accept-charset="UTF-8">
             <table>
                 <tr>
                     <td>아이디</td>
