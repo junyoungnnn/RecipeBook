@@ -1,7 +1,5 @@
 # 🍳 요리 레시피 공유 커뮤니티
 
-![Recipe Community Banner](https://via.placeholder.com/800x200.png?text=Recipe+Sharing+Community)
-
 ---
 
 ## 🌟 프로젝트 개요
