@@ -11,7 +11,7 @@
 
 ## 📄 발표 자료
 
-[![슬라이드 미리보기](https://github.com/user-attachments/assets/8ebaba37-7087-4712-8062-0d1e80743a63)](https://docs.google.com/presentation/d/1s8myBKNAAtfVQtvswPMHuELmRBydchy-/edit?usp=sharing&ouid=106464620923714521106&rtpof=true&sd=true)
+[![슬라이드 미리보기](https://github.com/user-attachments/assets/8ebaba37-7087-4712-8062-0d1e80743a63)](https://drive.google.com/file/d/1ADplz1-LUte5oT98-sXQIJXuTS5tTKL_/view?usp=sharing)
 
 > 이미지를 클릭하면 Google Slides에서 전체 발표 자료를 확인할 수 있습니다.
 
